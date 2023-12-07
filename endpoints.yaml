@@ -1,0 +1,138 @@
+openapi: "3.0.0"
+info:
+  title: "Police Check API"
+  version: "1.0.0"
+paths:
+  /criminal_records:
+    post:
+      summary: "Submit a police check request"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - firstName
+                - lastName
+                - city
+                - nic
+                - crime_cat
+                - crime_severity
+              properties: 
+                firstName:
+                  type: string 
+                lastName:
+                  type: string
+                middleName:
+                  type: string
+                city:
+                  type: string
+                nic:
+                  type: string
+                crime_cat:
+                  type: string
+                crime_severity:
+                  type: int
+                comments:
+                  type: string
+
+      responses:
+        201:
+          description: "CREATED"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "Request submitted successfully"
+        400:
+          description: "BAD REQUEST"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "Bad request"
+        500:
+          description: "INTERNAL SERVER ERROR"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "Internal server error"
+        deprecated: false
+        security: []
+
+  /check_status:
+    post:
+      summary: "Check status of a police check request"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nic
+              properties: 
+                nic:
+                  type: string
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "Request found"
+        400:
+          description: "BAD REQUEST"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "Bad request"
+        500:
+          description: "INTERNAL SERVER ERROR"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "error"
+                  message:
+                    type: string
+                    example: "Internal server error"
+        deprecated: false
+        security: []

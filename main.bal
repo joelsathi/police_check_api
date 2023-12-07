@@ -14,6 +14,6 @@ service / on new http:Listener(port) {
     }
 
     resource function post check_status(@http:Payload NIC_Record nic_record,http:Caller caller) returns error? {
-        return getCrimeRecord(nic_record.nic, caller);
+        return getCrimeRecord(nic_record.nic, caller);  
     }
 }

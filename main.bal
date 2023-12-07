@@ -13,7 +13,7 @@ service / on new http:Listener(port) {
         return addCrimeRecord(crime_record, caller);
     }
 
-    resource function get check_status/[string nic](http:Caller caller) returns error? {
-        return getCrimeRecord(nic, caller);
+    resource function post check_status(@http:Payload NIC_Record nic_record,http:Caller caller) returns error? {
+        return getCrimeRecord(nic_record.nic, caller);
     }
 }

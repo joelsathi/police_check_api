@@ -19,6 +19,14 @@ public type CrimeRecord record {|
     string comments?;
 |};
 
+public type NIC_Record record {
+    @constraint:String {
+        maxLength: 12,
+        minLength: 10
+    }
+    string nic;
+};
+
 configurable string username = ?;
 configurable string password = ?;
 configurable string collectionName = ?;

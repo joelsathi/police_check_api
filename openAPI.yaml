@@ -1,6 +1,6 @@
 openapi: "3.0.0"
 info:
-  title: Police_Check_API
+  title: PoliceCheck
   version: 1.0.0
 paths:
   /criminal_records:

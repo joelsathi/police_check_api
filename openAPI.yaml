@@ -1,13 +1,12 @@
 openapi: "3.0.0"
 info:
-  version: "1.0.0"
-  title: "Police_Check_API"
+  title: Police_Check_API
+  version: 1.0.0
 paths:
   /criminal_records:
     post:
-      summary: "Submit a police check request"
+      summary: Submit a police check request
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -39,7 +38,7 @@ paths:
 
       responses:
         201:
-          description: "CREATED"
+          description: Created
           content:
             application/json:
               schema:
@@ -47,12 +46,10 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: "success"
                   message:
                     type: string
-                    example: "Request submitted successfully"
         400:
-          description: "BAD REQUEST"
+          description: Bad_Request
           content:
             application/json:
               schema:
@@ -60,12 +57,10 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: "error"
                   message:
                     type: string
-                    example: "Bad request"
         500:
-          description: "INTERNAL SERVER ERROR"
+          description: Internal_Server_Error
           content:
             application/json:
               schema:
@@ -73,18 +68,15 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: "error"
                   message:
                     type: string
-                    example: "Internal server error"
         deprecated: false
         security: []
 
   /check_status:
     post:
-      summary: "Check status of a police check request"
+      summary: Check status of a police check request
       requestBody:
-        required: true
         content:
           application/json:
             schema:
@@ -96,7 +88,7 @@ paths:
                   type: string
       responses:
         200:
-          description: "OK"
+          description: OK
           content:
             application/json:
               schema:
@@ -104,12 +96,10 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: "success"
                   message:
                     type: string
-                    example: "Request found"
         400:
-          description: "BAD REQUEST"
+          description: BAD REQUEST
           content:
             application/json:
               schema:
@@ -117,12 +107,10 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: "error"
                   message:
                     type: string
-                    example: "Bad request"
         500:
-          description: "INTERNAL SERVER ERROR"
+          description: INTERNAL SERVER ERROR
           content:
             application/json:
               schema:
@@ -130,9 +118,7 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: "error"
                   message:
                     type: string
-                    example: "Internal server error"
         deprecated: false
         security: []

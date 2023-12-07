@@ -1,7 +1,7 @@
 openapi: "3.0.0"
 info:
   version: "1.0.0"
-  title: "Police Check API"
+  title: "Police_Check_API"
 paths:
   /criminal_records:
     post:

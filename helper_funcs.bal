@@ -98,7 +98,8 @@ function getCrimeRecord(string nic, http:Caller caller) returns error? {
 
     if (!isValid) {
         response.statusCode = 201;
-        response.setPayload({status:"Error",description: "Invalid NIC"});
+        // 4-> Invalid NIC
+        response.setPayload({status:4,description: "Invalid NIC"});
         check caller->respond(response);
         // io:print("Invalid NIC");
         return;
@@ -112,14 +113,21 @@ function getCrimeRecord(string nic, http:Caller caller) returns error? {
         // io:print("Error while getting crime record");
     }
     else{
-        if (count == 0) {
+        if (count <= 1) {
             response.statusCode = 201;
-            response.setPayload({status:"Approve",description: "Crime record not found"});
+            // 2-> Approved
+            response.setPayload({status:2,description: "Crime record not found"});
             // io:print("Crime record not found");
+        }
+        else if (count <= 10){
+            // 1-> Pending
+            response.statusCode = 201;
+            response.setPayload({status:1,description: "Crime record found"});
         }
         else {
             response.statusCode = 201;
-            response.setPayload({status:"Reject",description: "Crime record found"});
+            // 0 -> Declined
+            response.setPayload({status:0,description: "Crime record found"});
             // io:print("Crime record found");
         }
     }

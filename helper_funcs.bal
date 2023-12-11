@@ -66,7 +66,7 @@ function addCrimeRecord(CrimeRecord user_det, http:Caller caller) returns error?
     string message = validateData(user_det);
 
     if (message != "") {
-        response.statusCode = 400;
+        response.statusCode = 201;
         response.setPayload({status:"Error",description: message});
         check caller->respond(response);
         return;
@@ -97,7 +97,7 @@ function getCrimeRecord(string nic, http:Caller caller) returns error? {
     // io:print("isValid: " + isValid.toBalString());
 
     if (!isValid) {
-        response.statusCode = 400;
+        response.statusCode = 201;
         response.setPayload({status:"Error",description: "Invalid NIC"});
         check caller->respond(response);
         // io:print("Invalid NIC");
@@ -113,12 +113,12 @@ function getCrimeRecord(string nic, http:Caller caller) returns error? {
     }
     else{
         if (count == 0) {
-            response.statusCode = 200;
+            response.statusCode = 201;
             response.setPayload({status:"Approve",description: "Crime record not found"});
             // io:print("Crime record not found");
         }
         else {
-            response.statusCode = 200;
+            response.statusCode = 201;
             response.setPayload({status:"Reject",description: "Crime record found"});
             // io:print("Crime record found");
         }

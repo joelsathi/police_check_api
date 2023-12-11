@@ -1,14 +1,8 @@
 import ballerinax/mongodb;
 import ballerina/http;
-import ballerina/constraint;
 // import ballerina/io;
 
 public type CrimeRecord record {|
-    @constraint:String {
-        maxLength: 30,
-        minLength: 2
-    }
-
     string firstName;
     string lastName;
     string middleName?;
@@ -20,10 +14,6 @@ public type CrimeRecord record {|
 |};
 
 public type NIC_Record record {
-    @constraint:String {
-        maxLength: 12,
-        minLength: 10
-    }
     string nic;
 };
 

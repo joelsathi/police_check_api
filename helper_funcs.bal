@@ -66,7 +66,7 @@ function addCrimeRecord(CrimeRecord user_det, http:Caller caller) returns error?
     string message = validateData(user_det);
 
     if (message != "") {
-        response.statusCode = 201;
+        response.statusCode = 400;
         response.setPayload({status:"Error",description: message});
         check caller->respond(response);
         return;

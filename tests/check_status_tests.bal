@@ -7,7 +7,7 @@ http:Client testClient = check new ("http://localhost:9090");
 // Before Suite Function
 
 @test:BeforeSuite
-function beforeSuiteFunc() {
+function before_check_status_test() {
     io:println("I'm the before suite function!");
 }
 
@@ -58,6 +58,6 @@ function testServiceWithInvalidNIC() returns error? {
 // After Suite Function
 
 @test:AfterSuite
-function afterSuiteFunc() {
+function after_check_status_test() {
     io:println("I'm the after suite function!");
 }

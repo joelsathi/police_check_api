@@ -113,7 +113,7 @@ function getCrimeRecord(string nic, http:Caller caller) returns error? {
         // io:print("Error while getting crime record");
     }
     else{
-        if (count <= 1) {
+        if (count == 0) {
             response.statusCode = 201;
             // 2-> Approved
             response.setPayload({status:2,description: "Crime record not found"});
@@ -122,12 +122,12 @@ function getCrimeRecord(string nic, http:Caller caller) returns error? {
         else if (count <= 10){
             // 1-> Pending
             response.statusCode = 201;
-            response.setPayload({status:1,description: "Crime record found"});
+            response.setPayload({status:1,description: "Crime record found, Pending for approval"});
         }
         else {
             response.statusCode = 201;
             // 0 -> Declined
-            response.setPayload({status:0,description: "Crime record found"});
+            response.setPayload({status:0,description: "Crime record found, Declined"});
             // io:print("Crime record found");
         }
     }

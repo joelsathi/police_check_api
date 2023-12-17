@@ -1,29 +1,9 @@
-import ballerinax/mongodb;
 import ballerina/http;
-// import ballerina/io;
 
-public type CrimeRecord record {|
-    string firstName;
-    string lastName;
-    string middleName?;
-    string city;
-    string nic;
-    string crime_cat;
-    int crime_severity;           // Define a severity score between 1-10
-    string comments?;
-|};
-
-public type NIC_Record record {
-    string nic;
-};
-
-configurable string username = ?;
-configurable string password = ?;
-configurable string collectionName = ?;
-configurable string databaseName = ?;
-
-final mongodb:Client mongoClient = checkpanic new ({connection: {url: string `mongodb+srv://${username}:${password}@cluster0.dkdiej3.mongodb.net/?retryWrites=true&w=majority`}});
-
+# Validate the NIC with regex
+# 
+# + nic - NIC as a string
+# + return - boolean
 function validateNic(string nic) returns boolean {
     boolean isValid = false;
     string:RegExp nicRegex = re`^[0-9]{9}[vVxX]$`;
@@ -38,6 +18,10 @@ function validateNic(string nic) returns boolean {
     return isValid;
 }
 
+# Validate the crime severity
+# 
+# + crime_severity - crime severity as an integer
+# + return - boolean
 function validateCrimeSeverity(int crime_severity) returns boolean {
     boolean isValid = false;
     if (crime_severity >= 1 && crime_severity <= 10) {
@@ -46,6 +30,10 @@ function validateCrimeSeverity(int crime_severity) returns boolean {
     return isValid;
 }
 
+# Validate the data
+# 
+# + user_det - CrimeRecord object
+# + return - string, a message containing the error
 function validateData(CrimeRecord user_det) returns string {
     string message = "";
 
@@ -60,6 +48,11 @@ function validateData(CrimeRecord user_det) returns string {
     return message;
 }
 
+# Add a crime record in the database
+# 
+# + user_det - CrimeRecord object
+# + caller - http:Caller object
+# + return - error
 function addCrimeRecord(CrimeRecord user_det, http:Caller caller) returns error? {
     http:Response response = new;
 
@@ -77,31 +70,36 @@ function addCrimeRecord(CrimeRecord user_det, http:Caller caller) returns error?
     if res is error {
         response.statusCode = 500;
         response.setPayload({status:"Error",description: "Error while adding crime record"});
-        // io:print("Error while adding crime record");
     }
     else{
         response.statusCode = 201;
         response.setPayload({status:"Success",description: "Crime record added successfully"});
-        // io:print("Crime record added successfully");
     }
 
     check caller->respond(response);
     return;
 }
 
+# Get a crime record from the database  
+# Status codes and details are as follows
+# 0 - Declined
+# 1 - Pending for approval
+# 2 - Not found
+# 3 - More Info needed
+# 4 - Invalid Data
+# 
+# + nic - NIC as a string
+# + caller - http:Caller object, it will contain the JSON response
+# + return - error
 function getCrimeRecord(string nic, http:Caller caller) returns error? {
     http:Response response = new;
 
-    // io:print("NIC: " + nic);
     boolean isValid = validateNic(nic);
-    // io:print("isValid: " + isValid.toBalString());
 
     if (!isValid) {
         response.statusCode = 201;
-        // 4-> Invalid NIC
         response.setPayload({status:4,description: "Invalid NIC"});
         check caller->respond(response);
-        // io:print("Invalid NIC");
         return;
     }
 
@@ -110,25 +108,19 @@ function getCrimeRecord(string nic, http:Caller caller) returns error? {
     if count is error{
         response.statusCode = 500;
         response.setPayload({status:"Error",description: "Error while getting crime record"});
-        // io:print("Error while getting crime record");
     }
     else{
         if (count == 0) {
             response.statusCode = 201;
-            // 2-> Approved
             response.setPayload({status:2,description: "Crime record not found"});
-            // io:print("Crime record not found");
         }
         else if (count <= 10){
-            // 1-> Pending
             response.statusCode = 201;
             response.setPayload({status:1,description: "Crime record found, Pending for approval"});
         }
         else {
             response.statusCode = 201;
-            // 0 -> Declined
             response.setPayload({status:0,description: "Crime record found, Declined"});
-            // io:print("Crime record found");
         }
     }
 

@@ -2,12 +2,12 @@ import ballerina/http;
 import ballerina/io;
 import ballerina/test;
 
-@test:BeforeSuite
+@test:BeforeGroups { value:["add_crime_records"] }
 function before_add_crime_records() {
-    io:println("Starting the add crime records test suite");
+    io:println("Starting the add crime records tests");
 }
 
-@test:Config {}
+@test:Config { groups: ["add_crime_records"] }
 function testServiceWithValidPayload() {
     json payload = {
         "firstName": "mj",
@@ -24,7 +24,7 @@ function testServiceWithValidPayload() {
     test:assertEquals(responsePayload, expected, "Response payload mismatched");
 }
 
-@test:Config {}
+@test:Config { groups: ["add_crime_records"] }
 function testWithInvalidNIC(){
     json payload = {
         "firstName": "mj",
@@ -41,7 +41,7 @@ function testWithInvalidNIC(){
     test:assertEquals(responsePayload, expected, "Response payload mismatched");
 }
 
-@test:Config {}
+@test:Config { groups: ["add_crime_records"] }
 function testWithInvalidCrimeSeverity(){
     json payload = {
         "firstName": "mj",
@@ -58,8 +58,8 @@ function testWithInvalidCrimeSeverity(){
     test:assertEquals(responsePayload, expected, "Response payload mismatched");
 }
 
-@test:AfterSuite
+@test:AfterGroups { value:["add_crime_records"] }
 function after_add_crime_records() {
-    io:println("Completed the add crime records test suite");
+    io:println("Completed the add crime records tests");
 }
 

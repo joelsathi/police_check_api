@@ -2,18 +2,15 @@ import ballerina/io;
 import ballerina/http;
 import ballerina/test;
 
-http:Client testClient = check new ("http://localhost:9090");
+http:Client testClient = check new ("http://localhost:9090/police_check");
 
-// Before Suite Function
-
-@test:BeforeSuite
+@test:BeforeGroups { value:["check_status"] }
 function before_check_status_test() {
-    io:println("I'm the before suite function!");
+    io:println("Starting the check status tests");
 }
 
 // Test function
-
-@test:Config {}
+@test:Config { groups: ["check_status"] }
 function testServiceForCrimeRecordNotFound() {
     json payload = { "nic": "123456789V" };
     http:Response response = checkpanic testClient->post("/check_status", payload);
@@ -23,7 +20,7 @@ function testServiceForCrimeRecordNotFound() {
     test:assertEquals(result, expected);
 }   
 
-@test:Config {}
+@test:Config { groups: ["check_status"] }
 function testServiceForCrimeRecordFoundPending() {
     json payload = { "nic": "123456789032" };
     http:Response response = checkpanic testClient->post("/check_status", payload);
@@ -33,7 +30,7 @@ function testServiceForCrimeRecordFoundPending() {
     test:assertEquals(result, expected);
 }
 
-@test:Config {}
+@test:Config { groups: ["check_status"] }
 function testServiceForCrimeRecordFoundDeclined() {
     json payload = { "nic": "123456789012" };
     http:Response response = checkpanic testClient->post("/check_status", payload);
@@ -45,7 +42,7 @@ function testServiceForCrimeRecordFoundDeclined() {
 
 // Negative test function
 
-@test:Config {}
+@test:Config { groups: ["check_status"] }
 function testServiceWithInvalidNIC() returns error? {
     json payload = { "nic": "123456789" };
     http:Response response = check testClient->post("/check_status", payload);
@@ -55,9 +52,7 @@ function testServiceWithInvalidNIC() returns error? {
     test:assertEquals(errorPayload, expected);
 }
 
-// After Suite Function
-
-@test:AfterSuite
+@test:AfterGroups { value:["check_status"] }
 function after_check_status_test() {
-    io:println("I'm the after suite function!");
+    io:println("Completed the check status tests");
 }

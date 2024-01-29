@@ -122,8 +122,7 @@ function getCrimeRecord(string nic, http:Caller caller) returns error? {
             response.setPayload({status:2,description: "Crime record not found"});
         }
         else{
-            float avg_crime_severity = <float>(crime_severity / count);
-            if (avg_crime_severity < 5.1){
+            if (crime_severity < 10){
                 response.statusCode = 201;
                 response.setPayload({status:1,description: "Crime record found, Pending for approval"});
             }

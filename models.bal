@@ -12,3 +12,8 @@ public type CrimeRecord record {|
 public type NIC_Record record {
     string nic;
 };
+
+public type MongoCrimeRecord record{|
+    json _id;
+    *CrimeRecord;
+|};

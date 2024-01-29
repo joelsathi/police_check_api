@@ -103,7 +103,14 @@ function getCrimeRecord(string nic, http:Caller caller) returns error? {
         return;
     }
 
-    int|error count = check mongoClient->countDocuments(collectionName, databaseName, {nic: nic});
+    int crime_severity = 0;
+    map<json> filter = {nic: nic};
+    stream<MongoCrimeRecord, error?> result = check mongoClient->find(collectionName, databaseName, filter=filter);
+    check result.forEach(function (MongoCrimeRecord data) {
+        crime_severity = crime_severity + data.crime_severity;
+    });
+
+    int|error count = check mongoClient->countDocuments(collectionName, databaseName, filter=filter);
 
     if count is error{
         response.statusCode = 500;
@@ -114,13 +121,16 @@ function getCrimeRecord(string nic, http:Caller caller) returns error? {
             response.statusCode = 201;
             response.setPayload({status:2,description: "Crime record not found"});
         }
-        else if (count <= 10){
-            response.statusCode = 201;
-            response.setPayload({status:1,description: "Crime record found, Pending for approval"});
-        }
-        else {
-            response.statusCode = 201;
-            response.setPayload({status:0,description: "Crime record found, Declined"});
+        else{
+            float avg_crime_severity = <float>(crime_severity / count);
+            if (avg_crime_severity < 5.1){
+                response.statusCode = 201;
+                response.setPayload({status:1,description: "Crime record found, Pending for approval"});
+            }
+            else{
+                response.statusCode = 201;
+                response.setPayload({status:0,description: "Crime record found, Declined"});
+            }
         }
     }
 
